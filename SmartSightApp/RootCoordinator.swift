@@ -6,37 +6,26 @@
 
 import Foundation
 import UIKit
-
-import UIKit
+import FirebaseAuth
 
 class RootCoordinator: Coordinator {
     private let window: UIWindow
-    private var tabBarController: UITabBarController
-    
+    private let navigationController = UINavigationController()
+
     init() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
-        self.tabBarController = UITabBarController()
-        self.window.rootViewController = self.tabBarController
         self.window.makeKeyAndVisible()
     }
     
     func start() {
-        let homeCoordinator = HomeCoordinator(navigationController: UINavigationController())
-        homeCoordinator.start()
-        homeCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
-        
-        let searchCoordinator = SearchCoordinator(navigationController: UINavigationController())
-        searchCoordinator.start()
-        searchCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
-        
-        let favoritesCoordinator = FavoritesCoordinator(navigationController: UINavigationController())
-        favoritesCoordinator.start()
-        favoritesCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 2)
-        
-        tabBarController.viewControllers = [homeCoordinator.navigationController, searchCoordinator.navigationController, favoritesCoordinator.navigationController]
-        
-        tabBarController.tabBar.backgroundColor = .white
-        tabBarController.tabBar.tintColor = .gray
-        tabBarController.tabBar.unselectedItemTintColor = .black
+        if Auth.auth().currentUser != nil {
+            let mainCoordinator =  MainCoordinator(navigationController: navigationController)
+            window.rootViewController = mainCoordinator.navigationController
+            mainCoordinator.start()
+        } else {
+            let loginCoordinator = LoginCoordinator(navigationController: navigationController)
+            window.rootViewController = loginCoordinator.navigationController
+            loginCoordinator.start()
+        }
     }
 }
