@@ -30,15 +30,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.allowsSelection = false
         return tableView
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        title = "Home"
+
         tableView = UITableView(frame: view.bounds, style: .grouped)
         view.addSubview(tableView)
-        
+
         tableView.delegate = self
         tableView.dataSource = self
         
@@ -70,8 +72,11 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             cell.textLabel?.text = subOptionsForPhoto[indexPath.row]
         }
         
+        cell.selectionStyle = .none
+        
         return cell
     }
+
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
@@ -87,6 +92,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                 checkPhotoLibraryPermissionAndOpenGallery(mediaType: kUTTypeImage as String)
             }
         }
+        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
@@ -152,7 +158,35 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        if let image = info[.originalImage] as? UIImage {
+            // Eğer bir fotoğraf seçilmişse UIImage olarak döndür
+            handleSelectedImage(image)
+        } else if let videoURL = info[.mediaURL] as? URL {
+            do {
+                // Eğer bir video seçilmişse veri (Data) olarak döndür
+                let videoData = try Data(contentsOf: videoURL)
+                handleSelectedVideo(videoData)
+            } catch {
+                print("Video verisi alınamadı: \(error.localizedDescription)")
+            }
+        }
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        picker.dismiss(animated: true, completion: nil)
+    }
+    
+    func handleSelectedImage(_ image: UIImage) {
+        viewModel.presentSelectPhotoScenerioPage(image: image)
+        print("Seçilen fotoğraf: \(image)")
+    }
+    
+    func handleSelectedVideo(_ videoData: Data) {
 
-
+        print("Seçilen video verisi: \(videoData)")
+    }
 }
-

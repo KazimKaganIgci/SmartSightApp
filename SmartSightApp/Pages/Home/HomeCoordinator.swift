@@ -20,7 +20,10 @@ class HomeCoordinator : Coordinator{
         navigationController.pushViewController(vc, animated: true)
     }
     
-    func showDetailsPage(urlString: String) {
-        DetailsCoordinator(navigationController: navigationController, article: urlString).start()
+    func showSelectPhotoScenerioPage(image: UIImage) {
+        SelectPhotoScenerioCoordinator(
+            navigationController: navigationController,
+            image: image)
+        .start()
     }
 }

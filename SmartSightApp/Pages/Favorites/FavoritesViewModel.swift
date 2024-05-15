@@ -14,7 +14,7 @@ class FavoritesViewModel: FavoritesViewModelProtocol {
         self.coordinator = coordinator
     }
     
-    func presentDetailsPage(urlString: String) {
-        self.coordinator.showDetailsPage(urlString: urlString)
-    }
+//    func presentDetailsPage(urlString: String) {
+//        self.coordinator.showDetailsPage(urlString: urlString)
+//    }
 }

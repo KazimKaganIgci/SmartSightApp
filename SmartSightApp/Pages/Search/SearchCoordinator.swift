@@ -20,8 +20,4 @@ class SearchCoordinator : Coordinator{
         navigationController.setViewControllers([vc], animated: false)
         navigationController.setNavigationBarHidden(false, animated: true)
     }
-    
-    func showDetailsPage(urlString: String) {
-        DetailsCoordinator(navigationController: navigationController, article: urlString).start()
-    }
 }

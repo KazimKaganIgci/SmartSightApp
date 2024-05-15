@@ -65,8 +65,7 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
+ 
         setupViews()
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)

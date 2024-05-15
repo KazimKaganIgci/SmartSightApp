@@ -10,22 +10,22 @@ import FirebaseAuth
 
 class RootCoordinator: Coordinator {
     private let window: UIWindow
-    private let navigationController = UINavigationController()
+    private var rootNavigationController = UINavigationController()
 
     init() {
         self.window = UIWindow(frame: UIScreen.main.bounds)
         self.window.makeKeyAndVisible()
+        self.window.rootViewController = rootNavigationController
+
     }
     
     func start() {
         if Auth.auth().currentUser != nil {
-            let mainCoordinator =  MainCoordinator(navigationController: navigationController)
-            window.rootViewController = mainCoordinator.navigationController
-            mainCoordinator.start()
+            rootNavigationController.presentedViewController?.dismiss(animated: false)
+             MainCoordinator(navigationController: rootNavigationController).start()
         } else {
-            let loginCoordinator = LoginCoordinator(navigationController: navigationController)
-            window.rootViewController = loginCoordinator.navigationController
-            loginCoordinator.start()
+            rootNavigationController.presentedViewController?.dismiss(animated: false)
+            LoginCoordinator(navigationController: rootNavigationController).start()
         }
     }
 }

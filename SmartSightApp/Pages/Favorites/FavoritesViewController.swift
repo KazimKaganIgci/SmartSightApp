@@ -72,7 +72,7 @@ extension FavoritesViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let articles = MFUserDefaults.article {
             let item = articles[indexPath.row]
-            viewModel.presentDetailsPage(urlString: item.url)
+//            viewModel.presentDetailsPage(urlString: item.url)
             
         }
     }
