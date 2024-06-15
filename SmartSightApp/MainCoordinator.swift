@@ -16,22 +16,37 @@ class MainCoordinator: Coordinator {
     }
     
     func start() {
-        let homeNavigationController = UINavigationController()
-        let homeCoordinator = HomeCoordinator(navigationController: homeNavigationController)
-        homeCoordinator.start()
-        homeCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Home", image: UIImage(systemName: "house"), tag: 0)
-
-        let searchNavigationController = UINavigationController()
-        let searchCoordinator = SearchCoordinator(navigationController: searchNavigationController)
-        searchCoordinator.start()
-        searchCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Search", image: UIImage(systemName: "magnifyingglass"), tag: 1)
+        let photoNavigationController = UINavigationController()
+        let photoCoordinator = PhotoCoordinator(navigationController: photoNavigationController)
+        photoCoordinator.start()
+        photoCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Photo", image: UIImage(systemName: "photo"), tag: 0)
         
-        let favoritesNavigationController = UINavigationController()
-        let favoritesCoordinator = FavoritesCoordinator(navigationController: favoritesNavigationController)
-        favoritesCoordinator.start()
-        favoritesCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Favorites", image: UIImage(systemName: "star"), tag: 2)
-
-        tabBarController.viewControllers = [homeCoordinator.navigationController, searchCoordinator.navigationController, favoritesCoordinator.navigationController]
+        let videoNavigationController = UINavigationController()
+        let videoCoordinator = VideoCoordinator(navigationController: videoNavigationController)
+        videoCoordinator.start()
+        videoCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Emotion", image: UIImage(systemName: "video"), tag: 1)
+        
+        let liveNavigationController = UINavigationController()
+        let liveCoordinator = LiveCoordinator(navigationController: liveNavigationController)
+        liveCoordinator.start()
+        liveCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Live", image: UIImage(systemName: "livephoto"), tag: 2)
+        
+        let aiNavigationController = UINavigationController()
+        let aiCoordinator = AICoordinator(navigationController: aiNavigationController)
+        aiCoordinator.start()
+        aiCoordinator.navigationController.tabBarItem = UITabBarItem(title: "AI", image: UIImage(systemName: "gear"), tag: 3)
+        
+        let profileNavigationController = UINavigationController()
+        let profileCoordinator = ProfileCoordinator(navigationController: profileNavigationController)
+        profileCoordinator.start()
+        profileCoordinator.navigationController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.crop.circle"), tag: 4)
+        
+        
+        tabBarController.viewControllers = [photoCoordinator.navigationController,
+                                            videoCoordinator.navigationController,
+                                            liveCoordinator.navigationController,
+                                            aiCoordinator.navigationController,
+                                            profileCoordinator.navigationController]
 
         tabBarController.tabBar.backgroundColor = .white
         tabBarController.tabBar.tintColor = .gray

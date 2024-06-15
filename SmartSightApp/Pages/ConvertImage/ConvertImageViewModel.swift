@@ -9,8 +9,10 @@ import Foundation
 
 class ConvertImageViewModel {
     let coordinator: ConvertImageCoordinator
+    let action: MLProcessType
 
-    init(coordinator: ConvertImageCoordinator) {
+    init(coordinator: ConvertImageCoordinator, action: MLProcessType) {
         self.coordinator = coordinator
+        self.action = action
     }
 }

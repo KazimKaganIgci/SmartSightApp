@@ -9,4 +9,5 @@ import Foundation
 
 protocol LoginViewModelProtocol {
     func navigateToMainScreen()
-    func loginButtonTapped(email: String, password: String, completion: @escaping (String?) -> Void)}
+    func loginButtonTapped(email: String, password: String, completion: @escaping (String?) -> Void)
+}

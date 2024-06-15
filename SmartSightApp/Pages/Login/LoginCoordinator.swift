@@ -17,6 +17,9 @@ class LoginCoordinator : Coordinator{
 
     func start() {
         let vc = LoginViewController(viewModel: LoginViewModel(coordinator: self))
+        vc.hidesBottomBarWhenPushed = true
+        vc.navigationItem.hidesBackButton = true
+
         navigationController.pushViewController(vc, animated: true)
     }
     

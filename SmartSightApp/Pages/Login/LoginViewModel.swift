@@ -32,7 +32,6 @@ class LoginViewModel: LoginViewModelProtocol {
         }
     }
 
-    
     func registerButtonTapped() {
         coordinator.showRegisterViewController()
     }

@@ -20,9 +20,8 @@ class ConvertImageCoordinator : Coordinator {
     
     func start() {
         let vc = ConvertImageViewController(
-            viewModel: ConvertImageViewModel(coordinator: self),
-            image: image,
-            action: action)
+            viewModel: ConvertImageViewModel(coordinator: self, action: action),
+            image: image)
         
         navigationController.pushViewController(vc, animated: true)
     }

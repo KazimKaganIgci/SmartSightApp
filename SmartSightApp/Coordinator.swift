@@ -8,5 +8,4 @@
 import Foundation
 import UIKit
 
-protocol Coordinator: AnyObject {
-}
+protocol Coordinator: AnyObject {}

@@ -10,7 +10,6 @@ import UIKit
 
 class SelectPhotoScenerioCoordinator : Coordinator {
     var navigationController: UINavigationController
-    var secondNavigationController: UINavigationController?
     var image: UIImage
     
     init(navigationController: UINavigationController, image: UIImage) {
@@ -19,29 +18,25 @@ class SelectPhotoScenerioCoordinator : Coordinator {
     }
     
     func start() {
-        let secondNavigationController = UINavigationController()
-        //secondNavigationController.setNavigationBarHidden(true, animated: false)
         let vc = SelectPhotoScenerioViewController(
             viewModel: SelectPhotoScenerioViewModel(coordinator: self),
             image:  image)
-        //vc.hidesBottomBarWhenPushed = true
-        secondNavigationController.viewControllers = [vc]
-        secondNavigationController.modalPresentationStyle = .fullScreen
-        navigationController.present(secondNavigationController, animated: true)
-        self.secondNavigationController = secondNavigationController
+        vc.hidesBottomBarWhenPushed = true
+        vc.navigationItem.hidesBackButton = true
+        
+        navigationController.pushViewController(vc, animated: true)
     }
     
     func showConvertImagePage(image: UIImage, action: MLProcessType) {
-        guard let secondNavigationController else { return }
 
         ConvertImageCoordinator(
-            navigationController: secondNavigationController,
+            navigationController: navigationController,
             image: image,
             action: action)
         .start()
     }
     
     func stop() {
-        navigationController.dismiss(animated: true)
+        navigationController.popViewController(animated: true)
     }
 }

@@ -65,12 +65,11 @@ class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
- 
+        view.backgroundColor = .white
         setupViews()
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
-
     }
     
     @objc private func loginButtonTapped() {
@@ -97,7 +96,6 @@ class LoginViewController: UIViewController {
         alertController.addAction(okAction)
         present(alertController, animated: true, completion: nil)
     }
-
     
     private func setupViews() {
         view.addSubview(titleLabel)

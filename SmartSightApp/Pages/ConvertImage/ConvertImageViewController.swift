@@ -12,13 +12,11 @@ import CoreML
 
 class ConvertImageViewController: UIViewController {
     let image: UIImage
-    let action: MLProcessType
     let viewModel: ConvertImageViewModel
     
-    init(viewModel: ConvertImageViewModel, image: UIImage, action: MLProcessType) {
+    init(viewModel: ConvertImageViewModel, image: UIImage) {
         self.viewModel = viewModel
         self.image = image
-        self.action = action
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -87,7 +85,7 @@ class ConvertImageViewController: UIViewController {
     }
     
     private func getActions() {
-        switch action {
+        switch viewModel.action {
         case .objectRecognition:
             performObjectRecognition()
         case .faceRecognition:
@@ -99,74 +97,61 @@ class ConvertImageViewController: UIViewController {
                 guard let image else{ return }
                 self.imageView.image = image
             }
-            //        case .imageAnalysis:
-            //            performImageAnalysis()
-            //        case .emotionRecognition:
-            //            performEmotionRecognition()
-            //        case .documentScanning:
-            //            performDocumentScanning()
-            //        case .imageComparison:
-            //            performImageComparison()
-            //        case .imageEnhancement:
-            //            performImageEnhancement()
-            //        case .imageClassification:
-            //            performImageClassification()
-            //        case .imageSegmentation:
-            //            performImageSegmentation()
-            //        case .imageRegression:
-            //            performImageRegression()
-            //        case .imageGeneration:
-            //            performImageGeneration()
-            //        case .imageMarking:
-            //            performImageMarking()
-            //        case .imageMatching:
-            //            performImageMatching()
-            //        case .featureExtraction:
-            //            performFeatureExtraction()
+        case .documentScanning: break
+            
         default: break
         }
     }
     
-    // Nesne tanıma işlemi
     func performObjectRecognition() {
-        guard let model = try? VNCoreMLModel(for: MobileNetV2().model) else {
-            print("Error: Unable to load Core ML model")
+        guard let model = try? VNCoreMLModel(for: best4().model) else {
+            print("Hata: Core ML modeli yüklenemedi")
             return
         }
         
         let request = VNCoreMLRequest(model: model) { request, error in
-            guard let results = request.results as? [VNClassificationObservation] else {
-                print("Error: Unable to process Core ML request")
+            guard let results = request.results as? [VNCoreMLFeatureValueObservation] else {
+                print("Hata: Core ML sonuçları işlenemedi")
                 return
             }
             
-            let sortedResults = results.sorted(by: { $0.confidence > $1.confidence })
-            var topResults = sortedResults.prefix(10)
-            
             var textString = ""
-            for result in topResults {
-                print("Detected object: \(result.identifier) - Confidence: \(result.confidence)")
-                textString += "Detected: \(result.identifier)\n \n"
+            for observation in results {
+                guard let featureValue = observation.featureValue.multiArrayValue else {
+                    continue
+                }
+                
+                let shape = featureValue.shape
+                
+                if shape.count > 0 {
+                    let classCount = shape[0].intValue
+                    
+                    for i in 0..<classCount {
+                        let confidence = featureValue[i].doubleValue
+                        let className = shape[i].intValue
+                        textString += "Algılanan Nesne: \(className) - Güvenilirlik: \(confidence)\n"
+                    }
+                }
             }
-            self.label.text = textString
             
+            DispatchQueue.main.async {
+                self.label.text = textString
+            }
         }
         
         guard let cgImage = image.cgImage else {
-            print("Error: Unable to create CGImage from UIImage")
+            print("Hata: UIImage'dan CGImage oluşturulamadı")
             return
         }
         
         let handler = VNImageRequestHandler(cgImage: cgImage, options: [:])
-        
         do {
             try handler.perform([request])
         } catch {
-            print("Error performing object recognition: \(error)")
+            print("Nesne tanıma işlemi gerçekleştirilirken hata oluştu: \(error)")
         }
     }
 
-    
     func performFaceRecognition() {
         guard let cgImage = image.cgImage else { return }
         
@@ -185,7 +170,6 @@ class ConvertImageViewController: UIViewController {
             print("Error performing face recognition: \(error)")
         }
     }
-    
     
     func performTextRecognition() {
         guard let cgImage = image.cgImage else { return }
@@ -232,5 +216,4 @@ class ConvertImageViewController: UIViewController {
         
         completion(UIImage(cgImage: cgImage, scale: image.scale, orientation: image.imageOrientation))
     }
-    
 }
